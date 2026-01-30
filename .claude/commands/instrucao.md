@@ -1,0 +1,1 @@
+## Um comando é um prompt pronto que voce consegue chama-lo de maneira facil atraves de um comando.
