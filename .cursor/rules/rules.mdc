@@ -32,9 +32,20 @@ Siga **Conventional Commits**: `<type>(<scope>): <subject>`
 
 **Escopos comuns**: `api`, `web`, `ui`, `backend`, `frontend`
 
-**Exemplo**: `feat(api): adiciona autenticação OAuth2`
+**Exemplo**: `feat(api): adiciona autenticacao OAuth2`
 
 > Para detalhes completos, consulte: [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0-beta.4/)
+
+### ⚠️ Importante: Caracteres Especiais
+
+**NÃO use** caracteres especiais em mensagens de commit (acentos, ç, til, etc.):
+
+❌ **Errado**: `feat: adiciona configuração`  
+✅ **Correto**: `feat: adiciona configuracao`
+
+**Motivo**: O GitHub pode exibir caracteres corrompidos (ex: "configuraĂÂ£es" ao invés de "configurações").
+
+**Caracteres a evitar**: `á é í ó ú ã õ â ê ô ç ñ à`
 
 ## Estrutura do Projeto
 
