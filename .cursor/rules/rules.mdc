@@ -47,6 +47,15 @@ Siga **Conventional Commits**: `<type>(<scope>): <subject>`
 
 **Caracteres a evitar**: `á é í ó ú ã õ â ê ô ç ñ à`
 
+### 🌐 Idioma dos Commits
+
+**SEMPRE escreva commits em português brasileiro (pt-br)**:
+
+✅ **Correto**: `feat: adiciona autenticacao de usuarios`  
+❌ **Errado**: `feat: add user authentication`
+
+**Motivo**: Este é um repositório de estudo em pt-br. Manter consistência no idioma facilita a leitura e compreensão do histórico.
+
 ## Estrutura do Projeto
 
 ```
