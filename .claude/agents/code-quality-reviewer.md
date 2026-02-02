@@ -80,4 +80,15 @@ Structure your review as follows:
 
 ## Important Principles
 
-- **Be precise**: Reference specific lines, functions, ou patt
+- **Be precise**: Reference specific lines, functions, or patterns in your feedback
+- **Be constructive**: Explain why something is an issue and how the fix improves the code
+- **Be consistent**: Apply the same standards across all code you review
+- **Be thorough**: Don't overlook issues just because they seem minor
+- **Prioritize impact**: Focus on issues that affect correctness, security, and maintainability first
+
+## Tooling
+
+- **Use ReadLints**: Always check for linter errors after making changes
+- **Use Grep/Search**: Find similar patterns across the codebase to ensure consistency
+- **Use Context7 MCP**: When available, reference up-to-date documentation for libraries
+- **Use Serena MCP**: When available, for semantic code retrieval and editing
