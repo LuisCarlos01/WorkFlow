@@ -1,5 +1,11 @@
 # WorkFlow - AI-Assisted Development Framework
 
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)
+![Spec-Driven Development](https://img.shields.io/badge/Spec--Driven%20Development-SDD-green)
+![AI-Assisted](https://img.shields.io/badge/AI-Assisted-orange)
+
 Um framework para desenvolvimento assistido por IA seguindo a metodologia **Spec-Driven Development (SDD)**.
 
 ## O que é Spec-Driven Development?
