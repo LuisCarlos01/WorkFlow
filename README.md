@@ -85,8 +85,28 @@ WorkFlow/
 | `/execute-task {slug} {num}` | Executa uma task específica |
 | `/execute-feature-task {slug}` | Executa todas as tasks de uma feature |
 
+## Configuração Inicial
+
+### 1. Configure o CLAUDE.md
+
+O arquivo `CLAUDE.md` é lido automaticamente pelo Claude e contém as instruções do projeto:
+
+```bash
+# Use o template como base
+cp CLAUDE.md seu-projeto/CLAUDE.md
+
+# Edite e adapte para seu projeto:
+# - Defina a persona do assistente
+# - Configure a stack tecnológica
+# - Adicione regras específicas
+# - Contextualize o projeto
+```
+
+📝 **Veja o exemplo completo:** [CLAUDE-example.md](docs/templates/CLAUDE-example.md)
+
 ## Documentação
 
+- [CLAUDE.md](CLAUDE.md) - Template de configuração para Claude
 - [Guia Básico](docs/guiabasico.md) - Como usar o workflow
 - [Spec-Driven Development](docs/spec-driven-development.md) - Conceitos do SDD
 - [Fluxo de Trabalho](docs/workflow.md) - Diagrama visual do processo
