@@ -2,6 +2,27 @@
 
 Esta pasta atua como o **centro de configuracao e extensao da IA** dentro do projeto. Aqui ficam regras, comandos, skills e agentes organizados em subpastas para melhor leitura, manutencao e escalabilidade.
 
+## 🎯 Proposito
+
+A pasta `.cursor` e o nucleo de configuracao de comportamento de IA dentro de um projeto com Cursor IDE.
+
+### Funcoes Principais
+
+| Funcao | Descricao |
+|--------|-----------|
+| **Personalizar comportamento** | Definir como agentes de IA devem agir no projeto |
+| **Guiar geracoes de codigo** | Regras que orientam estilo, padroes e limites |
+| **Adicionar subagents** | Workflows especializados para tarefas complexas |
+| **Organizar comandos** | Scripts e comandos reutilizaveis |
+| **Otimizar contexto** | Carregamento inteligente de informacoes |
+
+### Beneficios
+
+- ✅ **Consistencia:** Todos os membros do time recebem as mesmas instrucoes
+- ✅ **Eficiencia:** Agentes focados produzem melhores resultados
+- ✅ **Escalabilidade:** Estrutura modular cresce com o projeto
+- ✅ **Reutilizacao:** Configuracoes podem ser compartilhadas entre projetos
+
 ---
 
 ## 🗂️ Estrutura
@@ -16,10 +37,27 @@ Esta pasta atua como o **centro de configuracao e extensao da IA** dentro do pro
 │   └── <skill>.md
 ├── agents/             # Subagents especializados
 │   └── <agent>.md      # Ex: verifier.md, debugger.md
-├── global/             # (Opcional) Configuracoes compartilhadas
+├── semantic/           # Configuracoes de busca semantica
+│   ├── index-config.json
+│   └── semantic-tuning.md
+├── hooks/              # Scripts de automacao pos-processo
+│   └── *.ts
+├── utils/              # Utilitarios e padroes de contexto
 │   └── *.md
 └── README.md           # Este arquivo
 ```
+
+### Criterios de Separacao
+
+| Pasta | Proposito |
+|-------|-----------|
+| `commands/` | Tarefas discretas acionaveis por agentes |
+| `rules/` | Instrucoes persistentes que moldam comportamento geral |
+| `skills/` | Conhecimentos especializados aplicados por contexto |
+| `agents/` | Agentes auxiliares reutilizaveis (subagents) |
+| `semantic/` | Configuracoes e guias de busca semantica |
+| `hooks/` | Scripts para automacao pos-processo |
+| `utils/` | Modelos auxiliares e padroes de contexto |
 
 ---
 
@@ -388,6 +426,136 @@ Para cada problema, forneca:
 
 ---
 
+## 📌 semantic/
+
+**Assunto:** Configuracoes e guias de busca semantica  
+**Formato:** JSON para config, Markdown para guias
+
+### O que e Semantic Search
+
+A busca semantica permite que agentes Cursor encontrem trechos de codigo por **significado**, nao apenas por texto. O sistema indexa o codigo e transforma trechos em vetores para busca semantica.
+
+### Arquivos Comuns
+
+| Arquivo | Proposito |
+|---------|-----------|
+| `index-config.json` | Configuracoes de indexacao de codigo |
+| `semantic-tuning.md` | Recomendacoes de uso e ajustes |
+
+### Funcoes Recomendadas
+
+- Documentar parametros de indexacao
+- Listar caminhos criticos do codigo para referencia semantica
+- Fornecer regras de exclusao para indexadores (similar a `.gitignore`)
+
+### Exemplo de Configuracao
+
+```json
+{
+  "indexPaths": ["src/", "lib/"],
+  "excludePaths": ["node_modules/", "dist/", "*.test.ts"],
+  "chunkSize": 500,
+  "overlapTokens": 50
+}
+```
+
+### Boas Praticas
+
+- ✅ Indexar apenas codigo relevante (excluir testes, builds)
+- ✅ Documentar caminhos criticos para referencia rapida
+- ✅ Ajustar chunk size conforme tamanho do projeto
+- ❌ Evitar indexar arquivos gerados ou de terceiros
+
+---
+
+## 📌 hooks/
+
+**Assunto:** Scripts de automacao pos-processo  
+**Formato:** TypeScript ou JavaScript
+
+### Objetivo
+
+Automatizar acoes que devem ocorrer apos eventos especificos do agente ou do workflow de desenvolvimento.
+
+### Arquivos Comuns
+
+| Hook | Proposito |
+|------|-----------|
+| `post-agent-run.ts` | Executado apos o agente completar uma tarefa |
+| `pre-commit.ts` | Validacoes antes de commits |
+| `post-generate.ts` | Acoes apos geracao de codigo |
+
+### Exemplo de Hook
+
+```typescript
+// hooks/post-agent-run.ts
+export async function onAgentComplete(result: AgentResult) {
+  // Validar output
+  if (result.filesChanged.length > 0) {
+    await runLinter(result.filesChanged);
+    await runTests(result.filesChanged);
+  }
+  
+  // Log para auditoria
+  console.log(`Agent completou: ${result.taskId}`);
+}
+```
+
+### Boas Praticas
+
+- ✅ Hooks devem ser idem-potentes (podem rodar multiplas vezes)
+- ✅ Tratar erros graciosamente
+- ✅ Documentar dependencias e efeitos colaterais
+- ❌ Evitar hooks que bloqueiam por muito tempo
+
+---
+
+## 📌 utils/
+
+**Assunto:** Utilitarios e padroes de contexto  
+**Formato:** Markdown ou codigo
+
+### Objetivo
+
+Centralizar modelos auxiliares, templates e padroes de contexto que podem ser reutilizados por agentes, subagents e comandos.
+
+### Arquivos Comuns
+
+| Arquivo | Proposito |
+|---------|-----------|
+| `context-loaders.md` | Padroes para carregar contexto dinamicamente |
+| `prompt-templates.md` | Templates de prompts reutilizaveis |
+| `output-formats.md` | Formatos padrao de output |
+
+### Exemplo de Context Loader
+
+```markdown
+# Context Loaders
+
+## Carregar Arquivos Relacionados
+
+Quando precisar de contexto de arquivos relacionados:
+
+1. Identifique imports do arquivo atual
+2. Carregue apenas interfaces/tipos referenciados
+3. Inclua testes relacionados se existirem
+
+## Carregar Historico de Mudancas
+
+Para contexto de evolucao:
+- Ultimos 5 commits do arquivo
+- Issues relacionadas (se linkadas)
+```
+
+### Boas Praticas
+
+- ✅ Documentar claramente cada utilitario
+- ✅ Manter templates simples e focados
+- ✅ Versionar junto com o projeto
+- ❌ Evitar duplicar logica que ja existe em rules/skills
+
+---
+
 ## 🧠 Carregamento de Contexto Sob Demanda
 
 ### A Premissa
@@ -530,6 +698,87 @@ O agente busca conteudo sob demanda quando a query pedir por arquitetura.
 - ✅ Version control completo (Git)
 - ✅ Convencoes internas documentadas
 - ✅ Linters quando aplicavel
+
+---
+
+## 👥 Criterios de Manutencao e Escalabilidade
+
+Para times grandes, definicoes claras de regras e agentes sao essenciais.
+
+### Organizacao por Time/Dominio
+
+| Estrategia | Descricao |
+|------------|-----------|
+| **Regras por time** | Organize regras por times e tecnologias (ex: `rules/backend/`, `rules/frontend/`) |
+| **Agents por dominio** | Um subagent para banco de dados, outro para testes, outro para seguranca |
+| **Documentacao inline** | Cada arquivo deve explicar proposito, entradas esperadas e saida |
+
+### Processo de Atualizacao
+
+```text
+1. Proposta de mudanca (Issue/RFC)
+   ↓
+2. Pull Request com alteracoes em .cursor/
+   ↓
+3. Code Review por mantenedores
+   ↓
+4. Testes em ambiente isolado
+   ↓
+5. Merge e comunicacao ao time
+```
+
+### Checklist de Manutencao
+
+- [ ] Regras revisadas trimestralmente
+- [ ] Subagents testados apos atualizacoes do Cursor
+- [ ] Documentacao atualizada com mudancas
+- [ ] Metricas de uso coletadas (opcional)
+
+### Governanca Sugerida
+
+| Papel | Responsabilidade |
+|-------|------------------|
+| **Owner** | Aprovar mudancas estruturais |
+| **Maintainer** | Revisar PRs, manter consistencia |
+| **Contributor** | Propor e implementar melhorias |
+
+---
+
+## ⚠️ Restricoes e Consideracoes
+
+### Compatibilidade de Versoes
+
+> **Importante:** O Cursor evolui rapidamente. Diferentes versoes podem ter suportes distintos para agentes e regras.
+
+| Versao | Consideracoes |
+|--------|---------------|
+| < 0.40 | Subagents podem nao estar disponiveis |
+| 0.40+ | Suporte completo a agents/ |
+| Futuro | Sempre consulte documentacao oficial |
+
+### Limitacoes Conhecidas
+
+- **Janela de contexto:** LLMs tem limite de tokens. Use carregamento sob demanda.
+- **Latencia:** Muitas regras/agents podem aumentar tempo de resposta.
+- **Consistencia:** Agentes podem interpretar regras de forma variada.
+
+### Recomendacoes
+
+- ✅ Sempre consulte a [documentacao oficial](https://cursor.com/docs) quando algo parecer desalinhado
+- ✅ Teste mudancas em branch separado antes de mergear
+- ✅ Mantenha backup de configuracoes funcionais
+- ❌ Evite suposicoes nao documentadas sobre comportamento do Cursor
+
+### Debugging de Problemas
+
+```text
+Problema: Regra nao esta sendo aplicada
+   ↓
+1. Verificar glob pattern (esta correto?)
+2. Verificar alwaysApply (esta true se necessario?)
+3. Verificar se arquivo esta no escopo do glob
+4. Testar com regra simplificada
+```
 
 ---
 
