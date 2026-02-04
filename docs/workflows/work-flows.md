@@ -447,4 +447,4 @@ flowchart TD
 
 ---
 
-**Ultima Atualizacao**: 2024
+**Ultima Atualizacao**: Fevereiro 2026

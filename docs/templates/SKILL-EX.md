@@ -400,6 +400,6 @@ Skill para geração de testes automatizados. Utiliza quando o usuário precisa 
 - [ ] Referências em `references/` (se necessário)
 - [ ] Assets em `assets/` (se necessário)
 
-## Base do projeto é formatada para criar algo com:
+---
 
-    
+**Última Atualização:** Fevereiro 2026
