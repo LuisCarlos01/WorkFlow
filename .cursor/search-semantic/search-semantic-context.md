@@ -15,80 +15,15 @@ Cursor transforma seu código em vetores pesquisáveis por meio de um processo e
 7. Você recebe trechos de código relevantes com localização de arquivo e contexto, classificados por similaridade semântica à sua busca.
 
 ```mermaid
-graph LR
-    Root["🎨 .mermaid-diagram svg<br/><br/>Elemento Raiz<br/>dos Diagramas Mermaid"]
-    
-    subgraph Nodes["🔷 ELEMENTOS DE NÓS (.node)"]
-        direction TB
-        NodeParent["Seletor: .node<br/>───────────────"]
-        Rect["📦 rect<br/>━━━━━━━<br/>🖊️ stroke: var(--border)<br/>🎨 fill: var(--secondary)"]
-        Circle["⚪ circle<br/>━━━━━━━<br/>🖊️ stroke: var(--border)<br/>🎨 fill: var(--secondary)"]
-        Ellipse["🔵 ellipse<br/>━━━━━━━<br/>🖊️ stroke: var(--border)<br/>🎨 fill: var(--secondary)"]
-        Polygon["🔶 polygon<br/>━━━━━━━<br/>🖊️ stroke: var(--border)<br/>🎨 fill: var(--secondary)"]
-        PathNode["📍 path<br/>━━━━━━━<br/>🖊️ stroke: var(--border)<br/>🎨 fill: var(--secondary)"]
-        
-        NodeParent --> Rect
-        NodeParent --> Circle
-        NodeParent --> Ellipse
-        NodeParent --> Polygon
-        NodeParent --> PathNode
-    end
-    
-    subgraph Labels["📝 ELEMENTOS DE TEXTO"]
-        direction TB
-        LabelParent["Seletor: .label<br/>───────────────"]
-        Text["📄 text<br/>━━━━━━━<br/>🎨 fill: var(--foreground)<br/>🖍️ color: var(--foreground)"]
-        Span["📋 span<br/>━━━━━━━<br/>🎨 fill: var(--foreground)<br/>🖍️ color: var(--foreground)"]
-        
-        LabelParent --> Text
-        LabelParent --> Span
-    end
-    
-    subgraph Edges["🔗 ELEMENTOS DE CONEXÃO"]
-        direction TB
-        EdgeParent["Seletor: .edgePath<br/>───────────────"]
-        PathEdge["➡️ .path<br/>━━━━━━━<br/>🖊️ stroke: var(--border)"]
-        FlowLink["🔀 .flowchart-link<br/>━━━━━━━<br/>🖊️ stroke: var(--border)"]
-        
-        EdgeParent --> PathEdge
-        EdgeParent --> FlowLink
-    end
-    
-    subgraph Arrows["🎯 ELEMENTOS DE SETAS E MARCADORES"]
-        direction TB
-        ArrowHead["▶️ .arrowheadPath<br/>━━━━━━━<br/>🎨 fill: var(--border)"]
-        Marker["📌 .marker<br/>━━━━━━━<br/>🎨 fill: var(--border)<br/>🖊️ stroke: var(--border)"]
-    end
-    
-    Root ==> |contém| Nodes
-    Root ==> |contém| Labels
-    Root ==> |contém| Edges
-    Root ==> |contém| Arrows
-    
-    style Root fill:#1e40af,stroke:#1e3a8a,color:#fff,stroke-width:4px
-    style NodeParent fill:#8b5cf6,stroke:#7c3aed,color:#fff,stroke-width:3px
-    style LabelParent fill:#8b5cf6,stroke:#7c3aed,color:#fff,stroke-width:3px
-    style EdgeParent fill:#8b5cf6,stroke:#7c3aed,color:#fff,stroke-width:3px
-    
-    style Rect fill:#dbeafe,stroke:#3b82f6,color:#1e40af,stroke-width:2px
-    style Circle fill:#dbeafe,stroke:#3b82f6,color:#1e40af,stroke-width:2px
-    style Ellipse fill:#dbeafe,stroke:#3b82f6,color:#1e40af,stroke-width:2px
-    style Polygon fill:#dbeafe,stroke:#3b82f6,color:#1e40af,stroke-width:2px
-    style PathNode fill:#dbeafe,stroke:#3b82f6,color:#1e40af,stroke-width:2px
-    
-    style Text fill:#fef3c7,stroke:#f59e0b,color:#92400e,stroke-width:2px
-    style Span fill:#fef3c7,stroke:#f59e0b,color:#92400e,stroke-width:2px
-    
-    style PathEdge fill:#d1fae5,stroke:#10b981,color:#065f46,stroke-width:2px
-    style FlowLink fill:#d1fae5,stroke:#10b981,color:#065f46,stroke-width:2px
-    
-    style ArrowHead fill:#fce7f3,stroke:#ec4899,color:#831843,stroke-width:2px
-    style Marker fill:#fce7f3,stroke:#ec4899,color:#831843,stroke-width:2px
-    
-    style Nodes fill:#f0f9ff,stroke:#3b82f6,stroke-width:3px
-    style Labels fill:#fffbeb,stroke:#f59e0b,stroke-width:3px
-    style Edges fill:#ecfdf5,stroke:#10b981,stroke-width:3px
-    style Arrows fill:#fdf2f8,stroke:#ec4899,stroke-width:3px
+graph TD
+    A["Seu workspace"] --> B["Sincronização de arquivos"]
+    B --> C["Fragmentação"]
+    B --> D["Sua consulta de busca"]
+    C --> E["Embeddings de IA"]
+    D --> F["Embedding da consulta"]
+    E --> G["Banco de dados vetorial"]
+    F --> G
+    G --> H["Resultados da busca"]
 ```
         
 ## Por que usar busca semântica?
