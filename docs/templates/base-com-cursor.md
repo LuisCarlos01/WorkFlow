@@ -104,9 +104,8 @@ Regras que definem como o agente Cursor deve se comportar, quais padroes seguir 
 
 ```markdown
 ---
-title: Nome da Regra
 description: "Descricao curta com keywords. Keywords: backend, api, typescript."
-glob: "**/*.ts"           # Tipos de arquivo (opcional)
+globs: "**/*.ts"          # Tipos de arquivo (opcional)
 alwaysApply: true         # Sempre anexar ao contexto (default: false)
 ---
 
@@ -135,9 +134,8 @@ alwaysApply: true         # Sempre anexar ao contexto (default: false)
 
 ```markdown
 ---
-title: Regras Gerais do Projeto
 description: Regras globais. Keywords: git, commits, estrutura.
-glob: "**/*"
+globs: "**/*"
 alwaysApply: true
 ---
 
@@ -157,9 +155,8 @@ alwaysApply: true
 
 ```markdown
 ---
-title: Regras de Backend
 description: Padroes para APIs e servicos. Keywords: api, backend, node, typescript.
-glob: "backend/**/*"
+globs: "backend/**/*"
 alwaysApply: false
 ---
 
@@ -507,7 +504,7 @@ projeto-api/
 **rules.mdc:**
 ```markdown
 ---
-title: Regras Gerais
+description: Regras gerais do projeto
 alwaysApply: true
 ---
 

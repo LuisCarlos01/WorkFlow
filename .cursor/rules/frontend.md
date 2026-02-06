@@ -1,7 +1,6 @@
 ---
-title: Regras de Desenvolvimento Frontend
 description: Padrões específicos de frontend do projeto. Foca em convenções de componentes, estado e UI específicas deste projeto.
-glob: "**/*.{tsx,jsx,ts,js}" | "**/components/**" | "**/pages/**" | "**/app/**" | "**/src/**"
+globs: "**/*.{tsx,jsx,ts,js}" | "**/components/**" | "**/pages/**" | "**/app/**" | "**/src/**"
 alwaysApply: false
 ---
 

@@ -1,7 +1,6 @@
 ---
-title: Regras Gerais do Projeto
 description: Regras globais que se aplicam a todo o projeto. Foca em padrões específicos do projeto e ferramentas MCP.
-glob: "**/*"
+globs: "**/*"
 alwaysApply: true
 ---
 

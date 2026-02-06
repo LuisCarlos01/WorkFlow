@@ -1,7 +1,6 @@
 ---
-title: Regras de Desenvolvimento Backend
 description: Padrões específicos de backend do projeto. Foca em convenções de API, banco de dados e arquitetura específicas deste projeto.
-glob: "**/*.{ts,js,py,go,rs,java,php,rb}" | "**/api/**" | "**/server/**" | "**/backend/**"
+globs: "**/*.{ts,js,py,go,rs,java,php,rb}" | "**/api/**" | "**/server/**" | "**/backend/**"
 alwaysApply: false
 ---
 
