@@ -31,7 +31,10 @@ Subagentes são executados em um de dois modos:
 
 ![Modos de execução dos subagentes](../../imgs/subagent/foto12.png)
 
-ModoComportamentoMelhor para**Foreground**Bloqueia até o subagente terminar. Retorna o resultado imediatamente.Tarefas sequenciais em que você precisa do resultado.**Background**Retorna imediatamente. O subagente trabalha de forma independente.Tarefas longas ou fluxos de trabalho em paralelo.
+| Modo | Comportamento | Melhor para |
+| --- | --- | --- |
+| **Foreground** | Bloqueia até o subagente terminar. Retorna o resultado imediatamente. | Tarefas sequenciais em que você precisa do resultado. |
+| **Background** | Retorna imediatamente. O subagente trabalha de forma independente. | Tarefas longas ou fluxos de trabalho em paralelo. |
 
 ## Subagentes integrados
 
@@ -39,7 +42,11 @@ O Cursor inclui três subagentes integrados que lidam automaticamente com opera�
 
 ![Subagentes integrados do Cursor](../../imgs/subagent/foto13.png)
 
-SubagenteFinalidadePor que é um subagente**Explore**Pesquisa e analisa bases de códigoA exploração da base de código gera uma grande quantidade de saída intermediária que inflaria o contexto principal. Usa um modelo mais rápido para executar muitas buscas em paralelo.**Bash**Executa séries de comandos de shellA saída de comandos costuma ser verbosa. Isolá-la mantém o agente principal focado em decisões, não em logs.**Browser**Controla o navegador via ferramentas MCPInterações com o navegador produzem snapshots de DOM ruidosos e capturas de tela. O subagente filtra isso para mostrar apenas os resultados relevantes.
+| Subagente | Finalidade | Por que é um subagente |
+| --- | --- | --- |
+| **Explore** | Pesquisa e analisa bases de código | A exploração da base de código gera uma grande quantidade de saída intermediária que inflaria o contexto principal. Usa um modelo mais rápido para executar muitas buscas em paralelo. |
+| **Bash** | Executa séries de comandos de shell | A saída de comandos costuma ser verbosa. Isolá-la mantém o agente principal focado em decisões, não em logs. |
+| **Browser** | Controla o navegador via ferramentas MCP | Interações com o navegador produzem snapshots de DOM ruidosos e capturas de tela. O subagente filtra isso para mostrar apenas os resultados relevantes. |
 ### Por que esses subagentes existem
 
 Essas três operações têm características em comum: geram saída intermediária ruidosa, se beneficiam de prompts e ferramentas especializadas e podem consumir muito contexto. Executá-las como subagentes resolve vários problemas:
@@ -53,7 +60,12 @@ Você não precisa configurar esses subagentes. O Agent os utiliza automaticamen
 
 ## Quando usar subagents
 
-Use subagents quando...Use skills quando...Você precisa isolar o contexto para tarefas longas de pesquisaA tarefa tem um único propósito (gerar changelog, formatar)Você está executando vários fluxos de trabalho em paraleloVocê quer uma ação rápida e repetívelA tarefa exige especialização em várias etapasA tarefa é concluída de uma só vezVocê quer uma verificação independente do trabalhoVocê não precisa de uma janela de contexto separada
+| Use subagents quando... | Use skills quando... |
+| --- | --- |
+| Você precisa isolar o contexto para tarefas longas de pesquisa | A tarefa tem um único propósito (gerar changelog, formatar) |
+| Você está executando vários fluxos de trabalho em paralelo | Você quer uma ação rápida e repetível |
+| A tarefa exige especialização em várias etapas | A tarefa é concluída de uma só vez |
+| Você quer uma verificação independente do trabalho | Você não precisa de uma janela de contexto separada |
 Se você estiver criando um subagent para uma tarefa simples e de propósito único, como “gerar um changelog” ou “formatar imports”, considere usar uma [skill](/docs/context/skills) em vez disso.
 
 ## Início rápido
@@ -73,7 +85,14 @@ Defina subagentes personalizados para incorporar conhecimento especializado, apl
 
 
 
-TipoLocalizaçãoEscopo**Project subagents**`.cursor/agents/`Apenas o projeto atual`.claude/agents/`Apenas o projeto atual (compatibilidade com Claude)`.codex/agents/`Apenas o projeto atual (compatibilidade com Codex)**User subagents**`~/.cursor/agents/`Todos os projetos do usuário atual`~/.claude/agents/`Todos os projetos do usuário atual (compatibilidade com Claude)`~/.codex/agents/`Todos os projetos do usuário atual (compatibilidade com Codex)
+| Tipo | Localização | Escopo |
+| --- | --- | --- |
+| **Project subagents** | `.cursor/agents/` | Apenas o projeto atual |
+| | `.claude/agents/` | Apenas o projeto atual (compatibilidade com Claude) |
+| | `.codex/agents/` | Apenas o projeto atual (compatibilidade com Codex) |
+| **User subagents** | `~/.cursor/agents/` | Todos os projetos do usuário atual |
+| | `~/.claude/agents/` | Todos os projetos do usuário atual (compatibilidade com Claude) |
+| | `~/.codex/agents/` | Todos os projetos do usuário atual (compatibilidade com Codex) |
 Project subagents têm precedência em caso de conflito de nomes. Quando há subagents com o mesmo nome em vários locais, `.cursor/` tem precedência sobre `.claude/` ou `.codex/`.
 
 ### Formato de arquivo
@@ -105,7 +124,13 @@ Relate descobertas por severidade:
 
 ![Campos de configuração de subagentes](../../imgs/subagent/foto15.png)
 
-CampoObrigatórioDescrição`name`NãoIdentificador único. Use letras minúsculas e hifens. O padrão é o nome do arquivo sem extensão.`description`NãoQuando usar este subagente. O agente lê esta descrição para decidir sobre a delegação.`model`NãoModelo a ser usado: `fast`, `inherit` ou um ID de modelo específico. O padrão é `inherit`.`readonly`NãoSe definido como `true`, o subagente é executado com permissões de escrita restritas.`is_background`NãoSe definido como `true`, o subagente é executado em segundo plano sem aguardar a conclusão.
+| Campo | Obrigatório | Descrição |
+| --- | --- | --- |
+| `name` | Não | Identificador único. Use letras minúsculas e hifens. O padrão é o nome do arquivo sem extensão. |
+| `description` | Não | Quando usar este subagente. O agente lê esta descrição para decidir sobre a delegação. |
+| `model` | Não | Modelo a ser usado: `fast`, `inherit` ou um ID de modelo específico. O padrão é `inherit`. |
+| `readonly` | Não | Se definido como `true`, o subagente é executado com permissões de escrita restritas. |
+| `is_background` | Não | Se definido como `true`, o subagente é executado em segundo plano sem aguardar a conclusão. |
 ## Como usar subagentes
 
 ### Delegação automática
@@ -301,7 +326,11 @@ O Agent inclui todos os subagentes personalizados entre suas ferramentas dispon�
 
 Subagentes têm compensações. Entender isso ajuda você a decidir quando usá-los.
 
-BenefícioCompensaçãoIsolamento de contextoSobrecarga de inicialização (cada subagente coleta seu próprio contexto)Execução paralelaMaior uso de tokens (múltiplos contextos em execução simultânea)Foco especializadoLatência (pode ser mais lento do que o agente principal para tarefas simples)
+| Benefício | Compensação |
+| --- | --- |
+| Isolamento de contexto | Sobrecarga de inicialização (cada subagente coleta seu próprio contexto) |
+| Execução paralela | Maior uso de tokens (múltiplos contextos em execução simultânea) |
+| Foco especializado | Latência (pode ser mais lento do que o agente principal para tarefas simples) |
 ### Considerações sobre tokens e custos
 
 - **Subagentes consomem tokens de forma independente** — Cada subagente tem sua própria janela de contexto e uso de tokens. Executar cinco subagentes em paralelo consome aproximadamente cinco vezes os tokens de um único agente.
