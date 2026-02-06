@@ -77,8 +77,8 @@ Experimente estes comandos em seus projetos para entender melhor como funcionam.
 
 ### Checklist de revisão de código
 
- ```
- # Checklist de Revisão de Código
+```
+# Checklist de Revisão de Código
 
 ## Visão Geral
 Checklist abrangente para realizar revisões de código completas e garantir qualidade, segurança e manutenibilidade.
@@ -103,31 +103,128 @@ Checklist abrangente para realizar revisões de código completas e garantir qua
 - [ ] A validação de entrada está presente
 - [ ] Dados sensíveis são tratados adequadamente
 - [ ] Sem segredos hardcoded
+```
+
 ### Auditoria de segurança
+
+```
+# Auditoria de Segurança
+
+## Visão Geral
+Realize uma auditoria de segurança abrangente na base de código, verificando vulnerabilidades comuns e práticas inseguras.
+
+## Áreas de Verificação
+
+### Autenticação e Autorização
+- [ ] Tokens e sessões são gerenciados de forma segura
+- [ ] Permissões são verificadas em todos os endpoints
+- [ ] Senhas são armazenadas com hashing adequado
+
+### Validação de Entrada
+- [ ] Todas as entradas do usuário são validadas e sanitizadas
+- [ ] Proteção contra injeção SQL/NoSQL
+- [ ] Proteção contra XSS (Cross-Site Scripting)
+
+### Dados Sensíveis
+- [ ] Sem segredos hardcoded no código
+- [ ] Variáveis de ambiente usadas para configurações sensíveis
+- [ ] Dados sensíveis criptografados em trânsito e em repouso
+
+### Dependências
+- [ ] Sem dependências com vulnerabilidades conhecidas
+- [ ] Versões de pacotes estão atualizadas
+```
 
 ### Configurar nova funcionalidade
 
+```
+# Configurar Nova Funcionalidade
+
+## Visão Geral
+Configure a estrutura inicial para uma nova funcionalidade seguindo os padrões do projeto.
+
+## Etapas
+1. Criar branch a partir da branch principal
+2. Criar estrutura de diretórios necessária
+3. Configurar arquivos base (componentes, serviços, testes)
+4. Adicionar rotas ou endpoints necessários
+5. Criar testes unitários iniciais
+
+## Checklist
+- [ ] Branch criada com nome descritivo
+- [ ] Estrutura de diretórios segue o padrão do projeto
+- [ ] Arquivos base criados com boilerplate mínimo
+- [ ] Testes iniciais configurados e passando
+- [ ] Documentação atualizada se necessário
+```
+
 ### Criar pull request
 
+```
+# Criar Pull Request
+
+## Visão Geral
+Crie um pull request bem documentado para as mudanças atuais.
+
+## Etapas
+1. Verificar que todos os testes passam
+2. Revisar as mudanças no diff
+3. Criar descrição clara do PR incluindo:
+   - Resumo das mudanças
+   - Motivação e contexto
+   - Como foi testado
+   - Capturas de tela (se aplicável)
+4. Adicionar labels e revisores apropriados
+
+## Checklist do PR
+- [ ] Código segue os padrões do projeto
+- [ ] Testes adicionados/atualizados
+- [ ] Documentação atualizada
+- [ ] Sem conflitos com a branch principal
+- [ ] Commit messages seguem Conventional Commits
+```
+
 ### Executar testes e corrigir falhas
+
+```
+# Executar Testes e Corrigir Falhas
+
+## Visão Geral
+Execute a suíte completa de testes, identifique falhas e corrija os problemas encontrados.
+
+## Etapas
+1. Executar todos os testes do projeto
+2. Identificar testes que falharam
+3. Para cada falha:
+   - Analisar a mensagem de erro e stack trace
+   - Identificar a causa raiz
+   - Implementar a correção
+   - Re-executar o teste para confirmar
+4. Garantir que nenhum teste existente foi quebrado
+
+## Checklist
+- [ ] Todos os testes unitários passando
+- [ ] Todos os testes de integração passando
+- [ ] Sem regressões introduzidas
+- [ ] Cobertura de testes mantida ou melhorada
+```
 
 ### Integrar novo desenvolvedor
 
 ```
-
 # Integrar Novo Desenvolvedor
 
 ## Visão Geral
 Processo abrangente de integração para colocar um novo desenvolvedor em funcionamento rapidamente.
 
 ## Etapas
-1. **Configuração do ambiente**
+1. Configuração do ambiente
    - Instalar ferramentas necessárias
    - Configurar ambiente de desenvolvimento
    - Configurar editor e extensões
    - Configurar git e chaves SSH
 
-2. **Familiarização com o projeto**
+2. Familiarização com o projeto
    - Revisar estrutura do projeto
    - Entender arquitetura
    - Ler documentação principal
