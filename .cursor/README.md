@@ -34,16 +34,14 @@ A pasta `.cursor` e o nucleo de configuracao de comportamento de IA dentro de um
 ├── rules/              # Instrucoes de comportamento do agente
 │   └── *.md
 ├── skills/             # Skills de dominio
-│   └── <skill>.md
+│   └── <skill>/        # Cada skill e uma pasta
+│       └── SKILL.md    # Arquivo principal da skill
 ├── agents/             # Subagents especializados
 │   └── <agent>.md      # Ex: verifier.md, debugger.md
-├── semantic/           # Configuracoes de busca semantica
-│   ├── index-config.json
-│   └── semantic-tuning.md
-├── hooks/              # Scripts de automacao pos-processo
-│   └── *.ts
-├── utils/              # Utilitarios e padroes de contexto
-│   └── *.md
+├── search-semantic/    # Documentacao sobre busca semantica (gerenciada pelo Cursor)
+│   └── search-semantic-context.md
+├── hooks/              # Hooks do agente (scripts via hooks.json)
+│   └── hooks-context.md
 └── README.md           # Este arquivo
 ```
 
@@ -55,9 +53,8 @@ A pasta `.cursor` e o nucleo de configuracao de comportamento de IA dentro de um
 | `rules/` | Instrucoes persistentes que moldam comportamento geral |
 | `skills/` | Conhecimentos especializados aplicados por contexto |
 | `agents/` | Agentes auxiliares reutilizaveis (subagents) |
-| `semantic/` | Configuracoes e guias de busca semantica |
-| `hooks/` | Scripts para automacao pos-processo |
-| `utils/` | Modelos auxiliares e padroes de contexto |
+| `search-semantic/` | Documentacao sobre busca semantica (gerenciada automaticamente pelo Cursor) |
+| `hooks/` | Hooks do agente configurados via hooks.json (pre e pos-processo) |
 
 ---
 
@@ -74,15 +71,8 @@ Prover scripts de meta-prompt prontos para tarefas repetitivas (ex: criacao de P
 
 | Comando | Descricao |
 |---------|-----------|
-| `few-shot.md` | Template base de Few-Shot Prompting |
-| `few-shot-sdd.md` | Few-Shot para Spec-Driven Development |
-| `few-shot-tdd.md` | Few-Shot para Test-Driven Development |
-| `few-shot-bdd.md` | Few-Shot para Behavior-Driven Development |
-| `few-shot-ai-first.md` | Few-Shot para AI-First Development |
-| `few-shot-iterative.md` | Few-Shot para Iterative Development |
-| `few-shot-pragmatic.md` | Few-Shot para Pragmatic Development |
-| `few-shot-spike.md` | Few-Shot para Spike/Prototype-First |
-| `few-shot-trunk.md` | Few-Shot para Trunk-Based Development |
+| `` |  |
+
 
 ### Estrutura Recomendada
 
@@ -136,9 +126,8 @@ Fornecer instrucoes de sistema persistentes que moldam como o agente age, escrev
 
 ```markdown
 ---
-title: Nome da Regra
 description: "Descricao curta da regra"
-glob: "*.ts"           # Tipos de arquivo (opcional)
+globs: "*.ts"          # Tipos de arquivo (opcional)
 alwaysApply: true      # Sempre anexar ao contexto
 ---
 
@@ -176,19 +165,45 @@ alwaysApply: true      # Sempre anexar ao contexto
 ## 📌 skills/
 
 **Assunto:** Skills de dominio e workflows acionaveis pelo agente  
-**Formato:** Arquivos `*.md` com frontmatter `name` e `description`
+**Formato:** Cada skill e uma **pasta** contendo um arquivo `SKILL.md` com frontmatter `name` e `description`
 
 ### Objetivo
 
 Capacitar o agente com conhecimentos especializados ou processos que ele decide aplicar com base no contexto.
 
+### Estrutura Obrigatoria
+
+Cada skill deve ser uma pasta contendo um arquivo `SKILL.md`:
+
+```
+.cursor/
+└── skills/
+    └── nome-da-skill/
+        └── SKILL.md
+```
+
+Skills tambem podem incluir diretorios opcionais:
+
+```
+.cursor/
+└── skills/
+    └── deploy-app/
+        ├── SKILL.md
+        ├── scripts/
+        │   └── deploy.sh
+        ├── references/
+        │   └── REFERENCE.md
+        └── assets/
+            └── config-template.json
+```
+
 ### Conteudo Atual
 
 | Skill | Descricao |
 |-------|-----------|
-| `frontend-design-exemplo.md` | Criacao de interfaces frontend modernas |
+| `frontend-design-exemplo/SKILL.md` | Criacao de interfaces frontend modernas |
 
-### Estrutura Recomendada
+### Formato do SKILL.md
 
 ```markdown
 ---
@@ -218,10 +233,13 @@ description: Descricao curta com keywords relevantes. Keywords: keyword1, keywor
 
 ### Boas Praticas
 
-- ✅ Nome da skill explicito (testing, security, performance)
+- ✅ Uma pasta por skill com nome descritivo (testing, security, performance)
+- ✅ O `name` no frontmatter deve corresponder ao nome da pasta
 - ✅ Description com keywords para busca semantica
 - ✅ Incluir exemplos Few-Shot para consistencia
 - ✅ Facilitar invocacao automatica pelo agente
+- ✅ Manter `SKILL.md` enxuto; mover referencias para `references/`
+- ❌ Nao criar skills como arquivos `.md` soltos (sempre usar pasta + `SKILL.md`)
 - ❌ Nao criar skills muito genericas ou sobrepostas
 
 ---
@@ -426,133 +444,206 @@ Para cada problema, forneca:
 
 ---
 
-## 📌 semantic/
+## 📌 search-semantic/
 
-**Assunto:** Configuracoes e guias de busca semantica  
-**Formato:** JSON para config, Markdown para guias
+**Assunto:** Documentacao sobre busca semantica do Cursor  
+**Formato:** Markdown
 
 ### O que e Semantic Search
 
-A busca semantica permite que agentes Cursor encontrem trechos de codigo por **significado**, nao apenas por texto. O sistema indexa o codigo e transforma trechos em vetores para busca semantica.
+A busca semantica permite que o Cursor encontre trechos de codigo por **significado**, nao apenas por texto. O sistema indexa o codigo e transforma trechos em vetores para busca por similaridade.
 
-### Arquivos Comuns
+> **Importante:** A busca semantica e **totalmente gerenciada pelo Cursor**. A indexacao e automatica — nao existe arquivo de configuracao como `index-config.json`. O Cursor indexa todos os arquivos do workspace exceto os listados em `.gitignore` e `.cursorignore`.
 
-| Arquivo | Proposito |
-|---------|-----------|
-| `index-config.json` | Configuracoes de indexacao de codigo |
-| `semantic-tuning.md` | Recomendacoes de uso e ajustes |
+### Como funciona
 
-### Funcoes Recomendadas
+1. Arquivos do workspace sao sincronizados com seguranca para os servidores do Cursor
+2. Arquivos sao divididos em trechos significativos (funcoes, classes, blocos logicos)
+3. Cada trecho e convertido em embedding vetorial por modelos de IA
+4. Embeddings sao armazenados em banco de dados vetorial otimizado
+5. Consultas do usuario sao convertidas no mesmo espaco vetorial
+6. O sistema encontra trechos mais similares por comparacao vetorial
+7. Resultados sao retornados com localizacao e contexto
 
-- Documentar parametros de indexacao
-- Listar caminhos criticos do codigo para referencia semantica
-- Fornecer regras de exclusao para indexadores (similar a `.gitignore`)
+### Configuracao disponivel
 
-### Exemplo de Configuracao
+| Configuracao | Como fazer |
+|-------------|------------|
+| **Excluir arquivos da indexacao** | Adicionar ao `.gitignore` ou `.cursorignore` |
+| **Ativar indexacao automatica** | `Cursor Settings` > `Indexing & Docs` |
+| **Ver arquivos indexados** | `Cursor Settings` > `Indexing & Docs` > `View included files` |
 
-```json
-{
-  "indexPaths": ["src/", "lib/"],
-  "excludePaths": ["node_modules/", "dist/", "*.test.ts"],
-  "chunkSize": 500,
-  "overlapTokens": 50
-}
-```
+> Nao existem parametros configuraveis como `chunkSize`, `overlapTokens`, `indexPaths` ou `priority`. Toda a indexacao e gerenciada internamente pelo Cursor.
 
 ### Boas Praticas
 
-- ✅ Indexar apenas codigo relevante (excluir testes, builds)
-- ✅ Documentar caminhos criticos para referencia rapida
-- ✅ Ajustar chunk size conforme tamanho do projeto
-- ❌ Evitar indexar arquivos gerados ou de terceiros
+- ✅ Manter `.cursorignore` atualizado para excluir arquivos irrelevantes (builds, gerados, terceiros)
+- ✅ Aguardar 80% da indexacao concluida antes de usar busca semantica
+- ✅ O Agent usa grep + busca semantica em conjunto para melhores resultados
+- ❌ Nao criar arquivos de configuracao de indexacao (o Cursor nao os utiliza)
 
 ---
 
 ## 📌 hooks/
 
-**Assunto:** Scripts de automacao pos-processo  
-**Formato:** TypeScript ou JavaScript
+**Assunto:** Hooks do agente para observar, controlar e estender o loop do agente  
+**Configuracao:** `hooks.json` (projeto ou usuario)  
+**Scripts:** Bash, Python, TypeScript (via bun) ou qualquer executavel
+
+> 📚 **Referencia completa:** [hooks-context.md](hooks/hooks-context.md)
 
 ### Objetivo
 
-Automatizar acoes que devem ocorrer apos eventos especificos do agente ou do workflow de desenvolvimento.
+Hooks permitem **observar, controlar e estender** o loop do agente usando scripts personalizados. Sao processos separados que comunicam via **stdin/stdout usando JSON**. Executam **antes ou depois** de estagios definidos do loop do agente.
 
-### Arquivos Comuns
+Com hooks, voce pode:
 
-| Hook | Proposito |
-|------|-----------|
-| `post-agent-run.ts` | Executado apos o agente completar uma tarefa |
-| `pre-commit.ts` | Validacoes antes de commits |
-| `post-generate.ts` | Acoes apos geracao de codigo |
+- Executar formatadores apos edicoes de arquivos
+- Adicionar analytics e auditoria de eventos
+- Verificar PII (dados pessoais) ou segredos antes do envio
+- Controlar operacoes arriscadas (ex: escritas em SQL, comandos de rede)
+- Controlar a execucao de subagentes (ferramenta Task)
+- Injetar contexto no inicio da sessao
+- Bloquear prompts ou leituras de arquivos sensiveis
 
-### Exemplo de Hook
+### Arquitetura
 
-```typescript
-// hooks/post-agent-run.ts
-export async function onAgentComplete(result: AgentResult) {
-  // Validar output
-  if (result.filesChanged.length > 0) {
-    await runLinter(result.filesChanged);
-    await runTests(result.filesChanged);
+Hooks **NAO** sao exports TypeScript. Sao scripts executaveis independentes configurados via `hooks.json`:
+
+```
+Configuracao (hooks.json)
+    │
+    ├── Define eventos e scripts associados
+    │
+    ▼
+Evento do Agente (ex: beforeShellExecution)
+    │
+    ├── Cursor envia JSON via stdin para o script
+    │
+    ▼
+Script do Hook (bash/python/ts)
+    │
+    ├── Processa JSON de entrada
+    ├── Retorna JSON de saida via stdout
+    │
+    ▼
+Cursor interpreta a resposta (allow/deny/modify)
+```
+
+### Configuracao via hooks.json
+
+Hooks sao definidos em `hooks.json` em dois niveis:
+
+| Nivel | Localizacao | Escopo |
+|-------|-------------|--------|
+| **Projeto** | `<projeto>/.cursor/hooks.json` | Apenas este projeto |
+| **Usuario** | `~/.cursor/hooks.json` | Todos os projetos |
+
+```json
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      { "command": ".cursor/hooks/format.sh" }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/approve-network.sh",
+        "timeout": 30,
+        "matcher": "curl|wget|nc"
+      }
+    ],
+    "preToolUse": [
+      {
+        "command": ".cursor/hooks/validate-tool.sh",
+        "matcher": "Shell|Write"
+      }
+    ]
   }
-  
-  // Log para auditoria
-  console.log(`Agent completou: ${result.taskId}`);
 }
 ```
 
-### Boas Praticas
+### Eventos Disponiveis
 
-- ✅ Hooks devem ser idem-potentes (podem rodar multiplas vezes)
-- ✅ Tratar erros graciosamente
-- ✅ Documentar dependencias e efeitos colaterais
-- ❌ Evitar hooks que bloqueiam por muito tempo
+Hooks cobrem tanto eventos **pre-processo** quanto **pos-processo**:
 
----
+| Evento | Tipo | Descricao |
+|--------|------|-----------|
+| `sessionStart` | Pre | Inicio de nova conversa |
+| `sessionEnd` | Pos | Fim da conversa |
+| `preToolUse` | Pre | Antes de qualquer ferramenta |
+| `postToolUse` | Pos | Apos ferramenta bem-sucedida |
+| `postToolUseFailure` | Pos | Apos falha de ferramenta |
+| `subagentStart` | Pre | Antes de criar subagente |
+| `subagentStop` | Pos | Apos subagente concluir |
+| `beforeShellExecution` | Pre | Antes de comando shell |
+| `afterShellExecution` | Pos | Apos comando shell |
+| `beforeMCPExecution` | Pre | Antes de ferramenta MCP |
+| `afterMCPExecution` | Pos | Apos ferramenta MCP |
+| `beforeReadFile` | Pre | Antes de ler arquivo |
+| `afterFileEdit` | Pos | Apos editar arquivo |
+| `beforeSubmitPrompt` | Pre | Antes de enviar prompt |
+| `preCompact` | Pre | Antes de compactacao de contexto |
+| `stop` | Pos | Quando o loop do agente termina |
+| `afterAgentResponse` | Pos | Apos resposta do agente |
+| `afterAgentThought` | Pos | Apos bloco de raciocinio |
 
-## 📌 utils/
+### Tipos de Hook
 
-**Assunto:** Utilitarios e padroes de contexto  
-**Formato:** Markdown ou codigo
+| Tipo | Descricao |
+|------|-----------|
+| **Baseado em comando** | Script de shell que recebe JSON via stdin e retorna JSON via stdout |
+| **Baseado em prompt** | LLM avalia uma condicao em linguagem natural (sem script necessario) |
 
-### Objetivo
+### Exemplo de Hook (Bash)
 
-Centralizar modelos auxiliares, templates e padroes de contexto que podem ser reutilizados por agentes, subagents e comandos.
+```bash
+#!/bin/bash
+# .cursor/hooks/approve-network.sh
+# Le JSON da stdin, decide se permite o comando
 
-### Arquivos Comuns
+INPUT=$(cat)
+COMMAND=$(echo "$INPUT" | jq -r '.command')
 
-| Arquivo | Proposito |
-|---------|-----------|
-| `context-loaders.md` | Padroes para carregar contexto dinamicamente |
-| `prompt-templates.md` | Templates de prompts reutilizaveis |
-| `output-formats.md` | Formatos padrao de output |
+if echo "$COMMAND" | grep -qE 'rm -rf|drop database'; then
+  echo '{"permission": "deny", "user_message": "Comando destrutivo bloqueado"}'
+  exit 2
+fi
 
-### Exemplo de Context Loader
+echo '{"permission": "allow"}'
+exit 0
+```
 
-```markdown
-# Context Loaders
+### Exemplo de Hook (TypeScript via Bun)
 
-## Carregar Arquivos Relacionados
+```typescript
+// .cursor/hooks/track-stop.ts
+// Executado via: bun run .cursor/hooks/track-stop.ts
 
-Quando precisar de contexto de arquivos relacionados:
+import { readFileSync } from "fs";
 
-1. Identifique imports do arquivo atual
-2. Carregue apenas interfaces/tipos referenciados
-3. Inclua testes relacionados se existirem
+const input = JSON.parse(readFileSync("/dev/stdin", "utf-8"));
 
-## Carregar Historico de Mudancas
+// Processar evento de parada
+const result = {
+  followup_message: input.status === "error"
+    ? "O agente encontrou um erro. Investigue e tente novamente."
+    : undefined
+};
 
-Para contexto de evolucao:
-- Ultimos 5 commits do arquivo
-- Issues relacionadas (se linkadas)
+process.stdout.write(JSON.stringify(result));
 ```
 
 ### Boas Praticas
 
-- ✅ Documentar claramente cada utilitario
-- ✅ Manter templates simples e focados
-- ✅ Versionar junto com o projeto
-- ❌ Evitar duplicar logica que ja existe em rules/skills
+- ✅ Hooks devem ser idempotentes (podem rodar multiplas vezes)
+- ✅ Sempre ler JSON da stdin e retornar JSON na stdout
+- ✅ Usar codigo de saida `0` para sucesso, `2` para bloquear acao
+- ✅ Tratar erros graciosamente (fail-open por padrao)
+- ✅ Documentar dependencias e efeitos colaterais
+- ✅ Usar `matcher` para filtrar quando o hook executa
+- ❌ NAO usar exports TypeScript (hooks nao sao modulos importados)
+- ❌ Evitar hooks que bloqueiam por muito tempo (usar `timeout`)
 
 ---
 
@@ -752,9 +843,9 @@ Para times grandes, definicoes claras de regras e agentes sao essenciais.
 
 | Versao | Consideracoes |
 |--------|---------------|
-| < 0.40 | Subagents podem nao estar disponiveis |
-| 0.40+ | Suporte completo a agents/ |
-| Futuro | Sempre consulte documentacao oficial |
+| < 1.0 | Subagents e hooks podem nao estar disponiveis |
+| 1.0+ | Suporte completo a agents/, hooks e rules com frontmatter |
+| Futuro | Sempre consulte documentacao oficial para mudancas |
 
 ### Limitacoes Conhecidas
 
@@ -804,7 +895,7 @@ Problema: Regra nao esta sendo aplicada
    ↓
 2. rules/*.md (glob match)
    ↓
-3. skills/*.md (keyword match no contexto)
+3. skills/*/SKILL.md (keyword match no contexto)
    ↓
 4. agents/*.md (delegacao automatica ou /nome)
    ↓
@@ -816,12 +907,15 @@ Problema: Regra nao esta sendo aplicada
 ```
 Agent Principal
     │
-    ├──► Subagent (Foreground) ──► Resultado ──► Continua
+    ├──► Subagent (Foreground) ──► Mensagem final ──► Agent pai continua
     │
     └──► Subagent (Background) ──► [Trabalha independente]
               │
-              └──► Output em ~/.cursor/subagents/
+              └──► Mensagem final retornada ao Agent pai
 ```
+
+> **Nota:** Subagents nao gravam output em disco. Tanto em foreground quanto em
+> background, o resultado e retornado como uma mensagem final ao agente pai.
 
 ---
 

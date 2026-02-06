@@ -2,7 +2,7 @@
 
 ## Pense no fluxo assim:
 
-- RULES → SKILLS → SUBAGENTS → COMMANDS → SEMANTIC SEARCH
+- RULES → SKILLS → SUBAGENTS → COMMANDS → SEMANTIC SEARCH → HOOKS
 
 ## Não é hierarquia rígida, é um ciclo operacional.
 
@@ -16,7 +16,7 @@
 
 **SEMANTIC SEARCH**: memória inteligente. “Onde buscar contexto”.
 
-**HOOKS**: 
+**HOOKS**: automacoes do agente. "O que executar antes/depois de acoes".
 
 O erro comum é misturar tudo num prompt só. O acerto é delegar responsabilidade.
 
@@ -33,10 +33,10 @@ O que acontece por baixo dos panos:
 RULES já estão carregadas
 → estilo, arquitetura, restrições, padrões de teste.
 
-COMMAND é acionado
-→ /refactor-component
+COMMAND é acionado pelo usuário
+→ /refactor-component (um arquivo Markdown com instruções)
 
-O COMMAND delega para um SUBAGENT especializado
+O AGENT interpreta o command e, com base na complexidade da tarefa e nas descrições dos subagents disponíveis, decide delegar para um SUBAGENT especializado
 → refactor-assistant
 
 O SUBAGENT usa SKILLS
@@ -46,6 +46,8 @@ Antes de agir, o agente consulta a SEMANTIC SEARCH
 → encontra padrões existentes, componentes similares, decisões anteriores.
 
 Só então o código é modificado.
+
+> **Nota:** Commands não têm lógica de delegação embutida. São arquivos Markdown simples com instruções. Quem decide se e quando delegar para subagents é o Agent, autonomamente.
 
 Isso reduz tokens, aumenta consistência e evita “alucinação arquitetural”.
 
@@ -59,10 +61,13 @@ Isso reduz tokens, aumenta consistência e evita “alucinação arquitetural”
 │   ├── frontend.mdc
 │   └── testing.mdc
 ├── skills/
-│   ├── analyze-code.md
-│   ├── refactor-safely.md
-│   └── write-tests.md
-├── subagents/
+│   ├── analyze-code/
+│   │   └── SKILL.md
+│   ├── refactor-safely/
+│   │   └── SKILL.md
+│   └── write-tests/
+│       └── SKILL.md
+├── agents/
 │   ├── refactor-assistant.md
 │   ├── test-engineer.md
 │   └── code-reviewer.md
@@ -70,9 +75,8 @@ Isso reduz tokens, aumenta consistência e evita “alucinação arquitetural”
 │   ├── refactor-component.md
 │   ├── generate-tests.md
 │   └── review-pr.md
-├── semantic/
-│   ├── index-config.json
-│   └── semantic-guide.md
+├── search-semantic/
+│   └── search-semantic-context.md  # Documentacao (indexacao e gerenciada pelo Cursor)
 └── utils/
     └── context-policy.md
 
@@ -115,7 +119,12 @@ Sem exemplos longos
 Sempre verdadeiras
 
 ## SKILLS — capacidades reutilizáveis
-.cursor/skills/refactor-safely.md
+.cursor/skills/refactor-safely/SKILL.md
+---
+name: refactor-safely
+description: Apply refactors without altering observable behavior.
+---
+
 # Skill: Safe Refactoring
 
 ## Purpose
@@ -139,8 +148,10 @@ Apply refactors without altering observable behavior.
 
 Mentalidade: skill é como fazer, não quando nem quem.
 
+> **Importante:** Cada skill deve ser uma **pasta** contendo um arquivo `SKILL.md`, nao um arquivo `.md` solto.
+
 ## SUBAGENTS — especialistas cognitivos
-.cursor/subagents/refactor-assistant.md
+.cursor/agents/refactor-assistant.md
 # Subagent: Refactor Assistant
 
 ## Role
@@ -189,49 +200,51 @@ User requests refactoring of a component or file.
 - Test recommendations
 
 
-Commands são o botão que o humano aperta. Nada de lógica aqui — só orquestração.
+Commands são o botão que o humano aperta. Nada de lógica aqui — são instruções em Markdown que o Agent lê, interpreta e executa. O Agent é quem decide se delega para subagents ou não, com base na complexidade da tarefa.
 
-## SEMANTIC SEARCH — memória contextual
-.cursor/semantic/index-config.json (exemplo conceitual)
-{
-  "include": ["src/**"],
-  "exclude": ["node_modules", "dist"],
-  "priority": [
-    "src/components",
-    "src/hooks",
-    "src/services"
-  ]
-}
+## SEMANTIC SEARCH — memória contextual (gerenciada pelo Cursor)
 
-.cursor/semantic/semantic-guide.md
-# Semantic Search Usage
+> A busca semantica e **totalmente gerenciada pelo Cursor**. Nao existe arquivo de configuracao como `index-config.json`. O Cursor indexa automaticamente todos os arquivos do workspace, exceto os listados em `.gitignore` e `.cursorignore`.
 
-## Purpose
-Retrieve code by meaning, not filename.
+Para controlar o que e indexado, use `.cursorignore`:
 
-## Recommended Queries
+```
+# .cursorignore - Excluir da indexacao semantica
+node_modules/
+dist/
+*.test.ts
+```
+
+### Consultas recomendadas
+
 - "components similar to X"
 - "existing patterns for API calls"
 - "how tests are structured in this project"
 
-## Best Practices
-- Always search before creating something new
-- Prefer existing abstractions
+### Boas praticas
+
+- Sempre buscar antes de criar algo novo
+- Preferir abstracoes existentes
+- Manter `.cursorignore` atualizado
 
 ## Fluxo resumido (visão de engenharia)
 User Intent
    ↓
-COMMAND
+COMMAND (instrução em Markdown — acionado pelo usuário)
    ↓
-SUBAGENT
+AGENT (interpreta o command e decide como executar)
    ↓
-SKILLS
+SUBAGENT (se a tarefa for complexa — decisão do Agent)
    ↓
-SEMANTIC SEARCH (context)
+SKILLS (capacidades reutilizáveis)
    ↓
-RULES (constraints)
+SEMANTIC SEARCH (contexto)
+   ↓
+RULES (restrições — sempre ativas)
    ↓
 Action (code / docs / tests)
+
+> O Agent é o orquestrador central. Commands descrevem "o que fazer", mas é o Agent que decide "como fazer" — incluindo se usa subagents ou não.
 
 
 Isso é prompt engineering de verdade:
@@ -245,9 +258,9 @@ Copie a estrutura .cursor
 
 Ajuste apenas:
 
-rules/ (tecnologia e padrões)
+rules/ (tecnologia e padroes)
 
-semantic/index-config.json
+.cursorignore (quais arquivos excluir da indexacao)
 
 Reaproveite:
 
