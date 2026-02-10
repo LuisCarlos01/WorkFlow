@@ -93,6 +93,77 @@ Comece simples. Adicione rules apenas quando notar que o Agent comete o mesmo er
 
 Faça commit das suas rules no git para que todo o seu time se beneficie. Quando você vir o Agent cometer um erro, atualize a rule. Você pode até mencionar `@cursor` em uma issue ou PR do GitHub para que o Agent atualize a rule para você.
 
+## Padrão Lean Rules + On-Demand Docs
+
+### Problema
+
+Rules que entram no contexto do modelo consomem tokens em **toda** mensagem. Se uma rule de frontend tem 150 linhas com exemplos completos de código, esses tokens são gastos mesmo quando a IA só precisa saber a convenção de nomenclatura.
+
+### Solução
+
+Separar em duas camadas:
+
+```
+.cursor/rules/frontend.md  →  Rule LEAN (~40 linhas): decisões + mapa de navegação
+docs/patterns/frontend-patterns.md  →  Doc DETALHADO (~300 linhas): exemplos e snippets
+```
+
+**A rule lean** entra sempre no contexto (custo baixo). Ela contém:
+- Stack declarada
+- Decisões imperativas (SEMPRE/NUNCA)
+- Convenções de nomenclatura
+- **Tabela de "Consulta Sob Demanda"** → diz à IA ONDE buscar detalhes
+
+**O pattern doc** só é lido quando a IA decide que precisa. Ele contém:
+- Exemplos completos de código
+- Padrões arquiteturais com snippets
+- Explicações aprofundadas
+
+### Como funciona na prática
+
+1. Usuário abre um `.tsx` → Cursor carrega `frontend.md` (lean, ~40 linhas)
+2. IA precisa criar um componente → Lê a tabela "Consulta Sob Demanda"
+3. IA abre `docs/patterns/frontend-patterns.md#componentes` sob demanda
+4. IA implementa seguindo o padrão detalhado
+
+### Estrutura recomendada
+
+```
+project/
+├── .cursor/rules/
+│   ├── rules.md              # Regras globais (lean, alwaysApply: true)
+│   ├── frontend.md           # Lean rule (~40 linhas)
+│   └── backend.md            # Lean rule (~40 linhas)
+├── docs/
+│   └── patterns/
+│       ├── frontend-patterns.md  # Referência detalhada (~300 linhas)
+│       └── backend-patterns.md   # Referência detalhada (~300 linhas)
+```
+
+### Seção chave: Consulta Sob Demanda
+
+A tabela de consulta sob demanda é o que torna o padrão funcional. Ela cria um **mapa de navegação** para a IA:
+
+```markdown
+## Consulta Sob Demanda
+
+| Preciso de...                         | Consultar                                  |
+|---------------------------------------|--------------------------------------------|
+| Exemplos de componentes e composição  | `docs/patterns/frontend-patterns.md#componentes` |
+| Padrões de estado e data fetching     | `docs/patterns/frontend-patterns.md#estado` |
+| Padrões de testes                     | `docs/patterns/frontend-patterns.md#testes` |
+| Exemplos canônicos do projeto         | `src/components/` e `src/pages/`           |
+```
+
+### Referências
+
+Para exemplos completos do padrão Lean Rules:
+- Template e documentação: `docs/templates/RULES-CURSOR-EX.md`
+- Rule lean de frontend: `.cursor/rules/frontend.md`
+- Rule lean de backend: `.cursor/rules/backend.md`
+- Pattern doc de frontend: `docs/patterns/frontend-patterns.md`
+- Pattern doc de backend: `docs/patterns/backend-patterns.md`
+
 ## Formato do arquivo de regra
 
 Cada regra é um arquivo em markdown com metadados de *frontmatter* e conteúdo. Os metadados de *frontmatter* são usados para controlar como a regra será aplicada. O conteúdo corresponde à própria regra.
