@@ -1,4 +1,9 @@
-# 🎯 Template de Zero-Shot Prompting - Cursor IDE
+# Explicação sobre Zero-Shot
+
+**Zero-shot prompting** ocorre quando você não fornece nenhum exemplo para a LLM — ou seja, pede para o modelo fazer algo sem demonstrar a tarefa antes. O modelo responde com base apenas em seu conhecimento pré-treinado, sem exemplos adicionais no contexto.
+
+## 🎯 Template de Zero-Shot Prompting - Cursor IDE
+
 
 Template de prompt baseado em **Zero-Shot Prompting** para orientar o comportamento do modelo sem exemplos prévios. Foca em previsibilidade, clareza e qualidade de resposta através de regras claras e determinísticas.
 
