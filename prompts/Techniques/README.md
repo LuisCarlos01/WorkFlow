@@ -10,6 +10,7 @@ Guia prático para escolher a técnica de prompt correta para cada cenário de d
 |---------|---------------------|--------------|
 | [Role Prompting](#role-prompting) | Definir identidade e comportamento da IA | Baixa |
 | [Zero-Shot](#zero-shot-prompting) | Orientar sem exemplos, usando regras | Baixa |
+| [One-Shot](#one-shot-prompting) | Demonstrar com um único exemplo representativo | Baixa |
 | [Few-Shot](#few-shot-prompting) | Ensinar através de exemplos concretos | Média |
 | [Guardrails](#guardrails-prompting) | Aplicar regras e restrições rígidas | Média |
 | [Controle](#controle-prompting) | Limitar a um domínio específico único | Média |
@@ -35,7 +36,8 @@ Qual é sua necessidade principal?
 │   └─► Limitar a um domínio único → Controle
 │
 ├─► Ensinar um PADRÃO específico?
-│   ├─► Tenho exemplos concretos → Few-Shot
+│   ├─► Tenho vários exemplos → Few-Shot
+│   ├─► Tenho 1 exemplo representativo → One-Shot
 │   └─► Não tenho exemplos → Zero-Shot
 │
 ├─► Usar CONTEXTO do projeto?
@@ -88,6 +90,25 @@ Qual é sua necessidade principal?
 - Tarefas comuns de desenvolvimento
 - Explicações de conceitos padrão
 - Refatoração seguindo boas práticas gerais
+
+**Combina bem com:** Role, Guardrails
+
+---
+
+### One-Shot Prompting
+**Arquivo:** `Prompt-OneShot.md`
+
+**Use quando:**
+- Precisa de 1 exemplo para fixar formato ou estilo
+- Um exemplo representativo comunica o padrão com clareza
+- Quer economia de tokens (menos que Few-Shot)
+- Formato específico de saída é importante
+
+**Cenários típicos:**
+- Conversão de formatos (JSDoc → TypeScript, JSON → YAML)
+- Refatoração seguindo padrão demonstrado
+- Geração de texto com estrutura específica
+- Extração de dados em formato definido
 
 **Combina bem com:** Role, Guardrails
 
@@ -269,6 +290,7 @@ Qual é sua necessidade principal?
 | Iniciar projeto novo | Role | Guardrails |
 | Manter código existente | RAG | Role, Guardrails |
 | Gerar código com padrão específico | Few-Shot | Role, Guardrails |
+| Fixar formato com 1 exemplo | One-Shot | Role, Guardrails |
 | Debugging complexo | Chain-of-Thought | Role, Reflection |
 | Code review | Reflection | Role, Guardrails |
 | Decisão arquitetural | Tree of Thoughts | Role, Self-Consistency |
@@ -319,12 +341,46 @@ Segue processo formal de etapas, mantém regras durante todo o fluxo.
 
 ---
 
+## Como Escrever Bons Prompts
+
+### Processo Iterativo
+Escrever bons prompts é iterativo e progressivo. Pratique e teste variações — a qualidade melhora com a experiência.
+
+### Divida Tarefas Grandes
+Quebre tarefas complexas em partes menores e específicas. Facilita o entendimento e melhora os resultados.
+
+### Teste Variações
+Experimente diferentes formas de escrever a mesma instrução. Pequenas mudanças podem gerar grandes melhorias.
+
+### Instruções Claras
+Use linguagem direta e precisa. Evite ambiguidades que possam confundir a LLM.
+
+---
+
+## Técnicas Avançadas de Prompting
+
+### Use Comandos Diretos
+Use ordens claras no prompt: **Você deve**, **Faça**, **Não faça**. Estabelece autoridade e clareza na instrução.
+
+### Adicione Consequências
+Inclua consequência clara: **se você não fizer X, sua tarefa será rejeitada**. Reforça a importância de seguir as instruções.
+
+### Seja Específico
+Inclua detalhes técnicos relevantes: ferramentas necessárias, estruturas de arquivos, padrões específicos a seguir.
+
+### Use Markdown + XML
+Estruture os prompts com markdown para formatação e XML para seções específicas. Estudos da **Anthropic** comprovam a eficácia.
+
+---
+
+
 ## Resumo de Uma Linha
 
 | Técnica | Resumo |
 |---------|--------|
 | **Role** | Define QUEM a IA é |
 | **Zero-Shot** | Orienta SEM exemplos |
+| **One-Shot** | Demonstra com 1 EXEMPLO |
 | **Few-Shot** | Ensina COM exemplos |
 | **Guardrails** | Aplica REGRAS rígidas |
 | **Controle** | Limita a UM domínio |
