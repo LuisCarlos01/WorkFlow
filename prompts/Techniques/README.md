@@ -373,7 +373,29 @@ Estruture os prompts com markdown para formatação e XML para seções específ
 
 ---
 
+### Formatos de Prompts
 
+| Formato Markdown | Formato XML     |
+|------------------|-----------------|
+| Task             | `<Task>`        |
+| Instruction      | `<Instruction>` |
+| Requirements     | `<Requeriments>`|
+| Context          | `<Context>`     |
+| Output           | `<Output>`      |
+
+---
+
+### Roles
+
+Dentro de uma conversa ou prompt, temos diferentes **roles**. Em LLMs, a conversa é estruturada com papéis para diferenciar quem está falando.
+
+| Role       | Descrição                                                        |
+|------------|------------------------------------------------------------------|
+| **SYSTEM** | Define o comportamento geral e as instruções de alto nível       |
+| **USER**   | Representa a mensagem do usuário (pergunta ou instrução)          |
+| **ASSISTANT** | Representa a resposta gerada pelo modelo de IA                 |
+
+---
 ## Resumo de Uma Linha
 
 | Técnica | Resumo |
