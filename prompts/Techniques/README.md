@@ -392,8 +392,8 @@ Dentro de uma conversa ou prompt, temos diferentes **roles**. Em LLMs, a convers
 | Role       | Descrição                                                        |
 |------------|------------------------------------------------------------------|
 | **SYSTEM** | Define o comportamento geral e as instruções de alto nível       |
-| **USER**   | Representa a mensagem do usuário (pergunta ou instrução)          |
-| **ASSISTANT** | Representa a resposta gerada pelo modelo de IA                 |
+| **USER**   | Representa a mensagem do usuário (pergunta ou instrução)         |
+| **ASSISTANT** | Representa a resposta gerada pelo modelo de IA                |
 
 ---
 ## Resumo de Uma Linha
