@@ -213,10 +213,16 @@ Este projeto segue o Spec-Driven Development (SDD):
 
 ### Comandos Disponíveis
 
+**Workflow de Desenvolvimento:**
 - `/create-techspec {slug}` - Cria uma Tech Spec para uma feature
 - `/create-task {slug}` - Gera tasks a partir da Tech Spec
 - `/execute-task {slug} {num}` - Executa uma task específica
 - `/execute-feature-task {slug}` - Executa todas as tasks de uma feature
+
+**GitHub Integration:**
+- `/open-pr [contexto]` - Cria PR técnica e objetiva no GitHub
+- `/pr-with-issues [contexto]` - Cria PR com issues relacionadas
+- `/create-issues [fonte]` - Cria issues a partir de specs, tasks ou análise de código
 
 ### Agentes Especializados
 
