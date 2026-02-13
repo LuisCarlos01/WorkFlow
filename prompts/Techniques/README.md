@@ -396,6 +396,22 @@ Dentro de uma conversa ou prompt, temos diferentes **roles**. Em LLMs, a convers
 | **ASSISTANT** | Representa a resposta gerada pelo modelo de IA                |
 
 ---
+
+### Tecnicas Avançadas: **Pensar antes de responder**
+
+Para encorajar o modelo a realizar um raciocínio mais aprofundado antes de gerar a resposta, você pode incluir instruções específicas que o guiam a um processo de pensamento mais deliberado.
+
+#### Pense Antes de Responder
+
+Instrua o modelo a **pense bem antes de responder**. Isso o incentiva a considerar diferentes perspectivas e a elaborar uma resposta mais completa e ponderada, em vez de uma reação imediata.
+
+#### Raciocine sobre Múltiplas Soluções
+
+Peça ao modelo para **raciocinar sobre múltiplas soluções antes de executar sua tarefa**. Esta técnica promove a exploração de alternativas e a seleção da melhor opção, o que é especialmente útil para problemas complexos.
+
+Essas frases chave funcionam como metainstruções, guiando o processo interno do modelo e resultando em saídas mais robustas e de maior qualidade, aumentando a chance de obter a resposta ideal.
+
+---
 ## Resumo de Uma Linha
 
 | Técnica | Resumo |
